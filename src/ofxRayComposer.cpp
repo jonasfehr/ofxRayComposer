@@ -8,18 +8,6 @@
 
 #include "ofxRayComposer.h"
 
-#include <stdio.h>
-#define _USE_MATH_DEFINES
-#include <math.h>
-#include "rcdev.h"
-
-
-
-
-
-
-
-
 //--------------------------------------------------------------
 void ofxRayComposer::setup(bool bStartThread, int idRayComposer) {
     
@@ -62,7 +50,7 @@ void ofxRayComposer::init() {
         ofLogWarning() << "ofxRayComposer::init - API Version too old. Please use a newer dll/lib.\n";
         return -2;
     }
-    ofLogWarning() << "ofxRayComposer::init - API Version " << (ret >> 8) << "."<< (ret & 0xFF) << "\n"; //printf("API Version %d.%02d\n", ret >> 8, ret & 0xFF);
+    ofLogNotice() << "ofxRayComposer::init - API Version " << (ret >> 8) << "."<< (ret & 0xFF) << "\n"; //printf("API Version %d.%02d\n", ret >> 8, ret & 0xFF);
     
     /* Detect & enumerate the connected devices. */
     count = RCEnumerateDevices();
