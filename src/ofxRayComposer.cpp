@@ -11,14 +11,14 @@
 //--------------------------------------------------------------
 void ofxRayComposer::setup(bool bStartThread, int idRayComposer) {
     
-  
-
+    
+    
     
     
     
     idRayComposerConnection = idRayComposer;
     
-   // etherdream_lib_start();
+    // etherdream_lib_start();
     
     setPPS(30000);
     setWaitBeforeSend(false);
@@ -71,7 +71,7 @@ void ofxRayComposer::init() {
             ofLogWarning() << "ofxRayComposer::init - Error reading device id! Exit.\n";
             return -4;
         }
-        ofLogWarning() << "ofxRayComposer::init - device " << i << " id " << deviceId << "\n"; //printf(" %d: %s\n", i, deviceId);
+        ofLogNotice() << "ofxRayComposer::init - device " << i << " - id: " << deviceId << "\n"; //printf(" %d: %s\n", i, deviceId);
     }
     
     /* Demo laser output */
@@ -81,13 +81,13 @@ void ofxRayComposer::init() {
         ofLogWarning() << "ofxRayComposer::init - Error reading device id! Exit.\n";
         return -5;
     }
-    ofLogWarning() << "ofxRayComposer::init - Opening device: " <<  deviceId << "\n";
+    ofLogNotice() << "ofxRayComposer::init - Opening device: " <<  deviceId << "\n";
     handle = RCOpenDevice(deviceId);
     if(handle < 0){
         ofLogWarning() << "ofxRayComposer::init - Error opening device: " << handle << "! Exit.\n";
         return -6;
     }
-    ofLogWarning() << "ofxRayComposer::init - Starting laser.\n";
+    ofLogNotice() << "ofxRayComposer::init - Starting laser.\n";
     ret = RCStartOutput(handle);
     if(ret < RCOk){
         ofLogWarning() << "ofxRayComposer::init - Error starting laser output: " << ret << "! Exit.\n";
@@ -95,7 +95,7 @@ void ofxRayComposer::init() {
     }
     
     ofLogNotice() << "ofxRayComposer::init - done";
-
+    
     state = RAYCOMPOSER_FOUND;
 }
 
@@ -122,6 +122,8 @@ void ofxRayComposer::kill() {
             //return -12;
         }
     }
+    ofLogNotice() << "ofxRayComposer::kill - done";
+    
 }
 
 //--------------------------------------------------------------
@@ -156,69 +158,18 @@ void ofxRayComposer::stop() {
 //--------------------------------------------------------------
 void ofxRayComposer::send() {
     if(!stateIsFound() || points.empty()) return;
+    int ret = RCWaitForReady(handle, -1);
+    if(ret < RCOk){
+        ofLogWarning() << "ofxRayComposer::send - Error waiting for free buffer: " << ret << "! Exit.\n";
+        //return -8;
+    }
+    ret = RCWriteFrame(handle, (RCPoint*)points.data(), points.size(), pps, 0);
     
-//    if(bWaitBeforeSend) etherdream_wait_for_ready(device);
-//    else if(!etherdream_is_ready(device)) return;
-//    
-//    // DODGY HACK: casting ofxIlda::Point* to etherdream_point*
-//    int res = etherdream_write(device, (etherdream_point*)points.data(), points.size(), pps, 1);
-//    if (res != 0) {
-//        ofLogVerbose() << "ofxRayComposer::write " << res;
-//    }
-    
-        /* Your TODO: create fancy laser graphics here */
-//
-//    struct RCPoint {
-//        /** X (horizontal) position signal; range -32768 to 32767 results in -10V to +10V on the ILDA connector */
-//        signed short x;
-//        /** Y (vertical) position signal; range -32768 to 32767 results in -10V to +10V on the ILDA connector */
-//        signed short y;
-//        /** Red color signal; range 0 to 65535 results in 0V to +5V on the ILDA connector */
-//        unsigned short red;
-//        /** Green color signal; range 0 to 65535 results in 0V to +5V on the ILDA connector */
-//        unsigned short green;
-//        /** Blue color signal; range 0 to 65535 results in 0V to +5V on the ILDA connector */
-//        unsigned short blue;
-//        /** Intensity signal, range 0 to 65535 results in 0V to +5V on the ILDA connector */
-//        unsigned short intensity;
-//        /** User 1 (Cyan) signal; range 0 to 65535 results in 0V to +5V on the ILDA connector */
-//        unsigned short user1;
-//        /** User 2 (Magenta) signal; range 0 to 65535 results in 0V to +5V on the ILDA connector */
-//        unsigned short user2;
-//    };
-    
-    //    vector<RCPoint> rcPoints;
-    struct RCPoint rcPoints[2000];
-        for(int i=0; i < points.size(); i++){
-            //rcPoints.push_back(RCPoint());
-
-            rcPoints[i].x = points[i].x;
-            rcPoints[i].y = points[i].y;
-            rcPoints[i].red = points[i].r;
-            rcPoints[i].green = points[i].g;
-            rcPoints[i].blue = points[i].b;
-            rcPoints[i].intensity = points[i].a;
-            rcPoints[i].user1 = points[i].u1;
-            rcPoints[i].user2 = points[i].u2;
-        }
-        /* wait for free buffer; second parameter is timeout
-         *   0 = poll number of free buffers only, return immediately
-         * < 0 = wait forever until buffer becomes free
-         * > 0 = wait the number of miliseconds or until a buffer becomes free */
-        int ret = RCWaitForReady(handle, -1);
-        if(ret < RCOk){
-            ofLogWarning() << "ofxRayComposer::send - Error waiting for free buffer: " << ret << "! Exit.\n";
-            //return -8;
-        }
-    
-        unsigned int pointCount = sizeof(points) / sizeof(struct RCPoint);
-        ret = RCWriteFrame(handle, rcPoints, pointCount, pps, 0);
-        
-        if(ret < RCOk){
-            ofLogWarning() << "ofxRayComposer::send - Error writing frame to device: " << ret << "! Exit.\n";
-            //return -9;
-        }
-        points.clear();
+    if(ret < RCOk){
+        ofLogWarning() << "ofxRayComposer::send - Error writing frame to device: " << ret << "! Exit.\n";
+        //return -9;
+    }
+    points.clear();
 }
 
 

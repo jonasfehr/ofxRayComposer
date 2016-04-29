@@ -23,7 +23,7 @@ Installation
 `rsync -aved ../../../addons/ofxRayComposer/api-lib/osx_x86_64/lib/libusb-1.0.0.dylib "$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/lib/";  `
 `# redirect` 
 `install_name_tool -change @executable_path/lib/librcdev.1.dylib @executable_path/../Frameworks/librcdev.1.dylib "$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/$PRODUCT_NAME";`
-3. To avoid linker problems when compile your code, drag the file `librcdev.dylib` from `../ofxRayComposer/api-lib/osx_x86_64/` into your project folder (fx. src)
+3. To avoid linker problems when compile your code, drag the file `librcdev.1.4.0.dylib` from `../ofxRayComposer/api-lib/osx_x86_64/` into your project folder (fx. src)
 
 Example
 ------------
@@ -40,7 +40,8 @@ Compatibility
 tested on  
 - openFrameworks 0.9.3  
 - MacbookPro mid 2012 (2,6 GHz Intel Core i7 | 8 GB RAM)  
-- OSX El Capitan 10.0.4  
+- OSX El Capitan 10.11.4  
+- Xcode 7.3
   
 Known issues
 ------------
