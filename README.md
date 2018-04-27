@@ -18,12 +18,12 @@ Installation
 `# Copy libraries for the RayComposer USB dongle.`  
 `rsync -aved ../../../addons/ofxRayComposer/api-lib/osx_x86_64/librcdev.dylib "$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Frameworks/";  `
 `rsync -aved ../../../addons/ofxRayComposer/api-lib/osx_x86_64/librcdev.1.dylib "$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Frameworks/";  `
-`rsync -aved ../../../addons/ofxRayComposer/api-lib/osx_x86_64/librcdev.1.4.dylib "$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Frameworks/";  `
-`rsync -aved ../../../addons/ofxRayComposer/api-lib/osx_x86_64/librcdev.1.4.0.dylib "$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Frameworks/";  `
-`rsync -aved ../../../addons/ofxRayComposer/api-lib/osx_x86_64/lib/libusb-1.0.0.dylib "$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/lib/";  `
-`# redirect` 
+`rsync -aved ../../../addons/ofxRayComposer/api-lib/osx_x86_64/librcdev.1.6.dylib "$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Frameworks/";  `
+`rsync -aved ../../../addons/ofxRayComposer/api-lib/osx_x86_64/librcdev.1.6.0.dylib "$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/Frameworks/";  `
+`rsync -aved ../../../addons/ofxRayComposer/api-lib/osx_x86_64/libusb-1.0.0.dylib "$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/lib/";  `
+`# redirect`
 `install_name_tool -change @executable_path/lib/librcdev.1.dylib @executable_path/../Frameworks/librcdev.1.dylib "$TARGET_BUILD_DIR/$PRODUCT_NAME.app/Contents/MacOS/$PRODUCT_NAME";`
-3. To avoid linker problems when compile your code, drag the file `librcdev.1.4.0.dylib` from `../ofxRayComposer/api-lib/osx_x86_64/` into your project folder (fx. src)
+3. To avoid linker problems when compile your code, drag the file `librcdev.1.6.0.dylib` from `../ofxRayComposer/api-lib/osx_x86_64/` into your project folder (fx. src)
 
 Example
 ------------
@@ -38,18 +38,19 @@ the addon is designed to be used with:
 Compatibility
 ------------
 tested on  
-- openFrameworks 0.9.3  
+- openFrameworks 0.10  
 - MacbookPro mid 2012 (2,6 GHz Intel Core i7 | 8 GB RAM)  
 - OSX El Capitan 10.11.4  
 - Xcode 7.3
-  
+
 Known issues
 ------------
 none
 
 Version history
 ------------
-
+### v0.2
+- updated RayComposer API to 1.6
 ### v0.1
 - initial version
 
@@ -57,5 +58,4 @@ Licence
 -------
 The c++ code in this repository is available under the [MIT License](https://en.wikipedia.org/wiki/MIT_License).
 
-The use of the API is free of charge as long as it's used to drive the RayComposer hardware. (C) 2015 RayComposer - Robin Adams
-
+The use of the API is free of charge as long as it's used to drive the RayComposer hardware. (C) 2018 RayComposer - Robin Adams

@@ -136,7 +136,7 @@ void ofxRayComposer::threadedFunction() {
                 break;
                 
             case RAYCOMPOSER_FOUND:
-                if(lock()) {
+                if(tryLock()) {
                     send();
                     unlock();
                 }
@@ -147,7 +147,7 @@ void ofxRayComposer::threadedFunction() {
 
 //--------------------------------------------------------------
 void ofxRayComposer::start() {
-    startThread(true);  // TODO: blocking or nonblocking?
+    startThread();
 }
 
 //--------------------------------------------------------------

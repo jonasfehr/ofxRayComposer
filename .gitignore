@@ -83,3 +83,6 @@ Desktop.ini
 *.log
 *.sql
 *.sqlite
+
+# Resilio Sync
+*.rsls
