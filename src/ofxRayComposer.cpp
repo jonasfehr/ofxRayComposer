@@ -11,11 +11,6 @@
 //--------------------------------------------------------------
 void ofxRayComposer::setup(bool bStartThread, int idRayComposer) {
     
-    
-    
-    
-    
-    
     idRayComposerConnection = idRayComposer;
     
     // etherdream_lib_start();
@@ -136,7 +131,7 @@ void ofxRayComposer::threadedFunction() {
                 break;
                 
             case RAYCOMPOSER_FOUND:
-                if(tryLock()) {
+                if(lock()){// if of 0.10 tryLock()) {
                     send();
                     unlock();
                 }
@@ -243,11 +238,11 @@ int ofxRayComposer::getPPS() const {
 //--------------------------------------------------------------
 // for compability with ofxLaser
 //--------------------------------------------------------------
-bool ofxRayComposer::sendFrame(const vector<ofxLaserPoint>& points){
+bool ofxRayComposer::sendFrame(const vector<ofxLaser::Point>& points){
         vector<ofxIlda::Point> sendpoints(points.size());
         for(int i = 0; i<points.size(); i++) {
             ofxIlda::Point& p1 = sendpoints[i];
-            ofxLaserPoint p2 = points[i];
+            ofxLaser::Point p2 = points[i];
             p1.x = ofMap(p2.x,0,800,kIldaMinPoint, kIldaMaxPoint);
             p1.y = ofMap(p2.y,800,0,kIldaMinPoint, kIldaMaxPoint); // Y is UP in ilda specs
             p1.r = p2.r/255.0f*kIldaMaxIntensity;
@@ -263,12 +258,12 @@ bool ofxRayComposer::sendFrame(const vector<ofxLaserPoint>& points){
 }
 
 
-bool ofxRayComposer::sendPoints(const vector<ofxLaserPoint>& points){
+bool ofxRayComposer::sendPoints(const vector<ofxLaser::Point>& points){
     
     vector<ofxIlda::Point> sendpoints(points.size());
     for(int i = 0; i<points.size(); i++) {
         ofxIlda::Point& p1 = sendpoints[i];
-        ofxLaserPoint p2 = points[i];
+        ofxLaser::Point p2 = points[i];
         p1.x = ofMap(p2.x,0,800,kIldaMinPoint, kIldaMaxPoint);
         p1.y = ofMap(p2.y,800,0,kIldaMinPoint, kIldaMaxPoint); // Y is UP in ilda specs
         p1.r = p2.r/255.0f*kIldaMaxIntensity;

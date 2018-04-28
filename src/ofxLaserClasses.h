@@ -10,7 +10,9 @@
 #ifndef ofxLaserClasses_h
 #define ofxLaserClasses_h
 
-class ofxLaserPoint : public ofPoint {
+namespace ofxLaser {
+
+class Point : public ofPoint {
     
 public:
     
@@ -56,6 +58,6 @@ public:
     virtual bool setPointsPerSecond(uint32_t pps) { return true; };
     
 };
-
+}
 
 #endif /* ofxLaserClasses_h */

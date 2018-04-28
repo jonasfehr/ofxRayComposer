@@ -12,10 +12,13 @@
 #include "ofMain.h"
 #include "ofxIldaFrame.h"
 
-#include "ofxLaserClasses.h"
+//#include "ofxLaserClasses.h"
+
+#include "ofxLaserPoint.h"
+#include "ofxLaserDacBase.h"
 
 
-class ofxRayComposer : public ofThread, public DacBase {
+class ofxRayComposer : public ofThread, public ofxLaser::DacBase {
 public:
     ofxRayComposer():state(RAYCOMPOSER_NOTFOUND), bAutoConnect(false) {}
     
@@ -46,8 +49,9 @@ public:
     bool getWaitBeforeSend() const;
     
     // Compatibility to ofxLaser : https://github.com/sebleedelisle/ofxLaser
-    bool sendFrame(const vector<ofxLaserPoint>& points);
-    bool sendPoints(const vector<ofxLaserPoint>& points);
+    void setup(string ip){this->setup();};
+    bool sendFrame(const vector<ofxLaser::Point>& points);
+    bool sendPoints(const vector<ofxLaser::Point>& points);
     bool setPointsPerSecond(uint32_t newpps);
     void close();
 
