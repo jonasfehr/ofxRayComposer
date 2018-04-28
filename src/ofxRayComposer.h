@@ -12,10 +12,10 @@
 #include "ofMain.h"
 #include "ofxIldaFrame.h"
 
-//#include "ofxLaserClasses.h"
+#include "ofxLaserClasses.h"
 
-#include "ofxLaserPoint.h"
-#include "ofxLaserDacBase.h"
+//#include "ofxLaserPoint.h"
+//#include "ofxLaserDacBase.h"
 
 
 class ofxRayComposer : public ofThread, public ofxLaser::DacBase {
