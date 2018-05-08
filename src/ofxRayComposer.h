@@ -48,6 +48,9 @@ public:
     void setWaitBeforeSend(bool b);
     bool getWaitBeforeSend() const;
     
+    string getDeviceID(){return deviceId;};
+    int getConnectionID(){return idRayComposerConnection;};
+
     // Compatibility to ofxLaser : https://github.com/sebleedelisle/ofxLaser
     void setup(string ip){this->setup();};
     bool sendFrame(const vector<ofxLaser::Point>& points);
