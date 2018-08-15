@@ -9,9 +9,10 @@
 #include "ofxRayComposer.h"
 
 //--------------------------------------------------------------
-void ofxRayComposer::setup(bool bStartThread, int idRayComposer) {
+void ofxRayComposer::setup(bool bStartThread, int idRayComposer, bool extraSafety) {
     
     idRayComposerConnection = idRayComposer;
+    bExtraSafety = extraSafety;
     
     // etherdream_lib_start();
     
@@ -24,7 +25,7 @@ void ofxRayComposer::setup(bool bStartThread, int idRayComposer) {
     
     init();
     
-    if(bStartThread) start();
+    if(bStartThread && stateIsFound()) start();
 }
 
 
@@ -132,7 +133,11 @@ void ofxRayComposer::threadedFunction() {
                 
             case RAYCOMPOSER_FOUND:
                 if(lock()){// if of 0.10 tryLock()) {
-                    send();
+                    if(bExtraSafety){
+                        if(checkLastUpdate()) send();
+                        else sendBlack();
+                    }
+                    else send();
                     unlock();
                 }
                 break;
@@ -167,6 +172,17 @@ void ofxRayComposer::send() {
     points.clear();
 }
 
+//--------------------------------------------------------------
+void ofxRayComposer::sendBlack() {
+        points.clear();
+        ofxIlda::Point p;
+        p.x = 0;
+        p.y = 0;
+        p.r = p.g = p.b = p.u1 = p.u2 = 0;
+        points.push_back(p);
+    send();
+}
+
 
 //--------------------------------------------------------------
 void ofxRayComposer::clear() {
@@ -184,6 +200,7 @@ void ofxRayComposer::addPoints(const vector<ofxIlda::Point>& _points) {
         }
         unlock();
     }
+    updated();
 }
 
 
@@ -199,6 +216,7 @@ void ofxRayComposer::setPoints(const vector<ofxIlda::Point>& _points) {
         points = _points;
         unlock();
     }
+    updated();
 }
 
 
@@ -234,6 +252,15 @@ int ofxRayComposer::getPPS() const {
     return pps;
 }
 
+//--------------------------------------------------------------
+void ofxRayComposer::updated(){
+    lastUpdate = ofGetElapsedTimef();
+}
+
+//--------------------------------------------------------------
+bool ofxRayComposer::checkLastUpdate(){
+    return ofGetElapsedTimef()-lastUpdate < MAX_TIME_SAFE;
+}
 
 //--------------------------------------------------------------
 // for compability with ofxLaser

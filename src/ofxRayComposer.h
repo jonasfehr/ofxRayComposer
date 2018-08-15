@@ -17,6 +17,7 @@
 //#include "ofxLaserPoint.h"
 //#include "ofxLaserDacBase.h"
 
+#define MAX_TIME_SAFE 0.25 //sec
 
 class ofxRayComposer : public ofThread, public ofxLaser::DacBase {
 public:
@@ -27,7 +28,8 @@ public:
     }
     
     bool stateIsFound();
-    void setup(bool bStartThread = true, int idRayComposer = 0);
+    void setup(bool bStartThread = true, int idRayComposer = 0, bool extraSafety = true);
+
     virtual void threadedFunction();
     
     void clear();
@@ -41,6 +43,7 @@ public:
     void setPoints(const ofxIlda::Frame &ildaFrame);
     
     void send();
+    void sendBlack();
     
     void setPPS(int i);
     int getPPS() const;
@@ -72,6 +75,7 @@ private:
     int pps;
     bool bWaitBeforeSend;
     bool bAutoConnect;
+    bool bExtraSafety;
     
     //struct etherdream *device;
     vector<ofxIlda::Point> points;
@@ -81,5 +85,9 @@ private:
     int count; /* device count */
     char deviceId[256]; /* device id string */
     int handle; /* device handle */
+    
+    float lastUpdate = 0;
+    void updated();
+    bool checkLastUpdate();
 };
 
