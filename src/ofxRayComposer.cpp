@@ -175,7 +175,7 @@ void ofxRayComposer::send() {
 //--------------------------------------------------------------
 void ofxRayComposer::sendBlack() {
         points.clear();
-        ofxIlda::Point p;
+        ofxIlda::PointDac p;
         p.x = 0;
         p.y = 0;
         p.r = p.g = p.b = p.u1 = p.u2 = 0;
@@ -193,7 +193,7 @@ void ofxRayComposer::clear() {
 }
 
 //--------------------------------------------------------------
-void ofxRayComposer::addPoints(const vector<ofxIlda::Point>& _points) {
+void ofxRayComposer::addPoints(const vector<ofxIlda::PointDac>& _points) {
     if(lock()) {
         if(!_points.empty()) {
             points.insert(points.end(), _points.begin(), _points.end());
@@ -206,12 +206,12 @@ void ofxRayComposer::addPoints(const vector<ofxIlda::Point>& _points) {
 
 //--------------------------------------------------------------
 void ofxRayComposer::addPoints(const ofxIlda::Frame &ildaFrame) {
-    addPoints(ildaFrame.getPoints());
+    addPoints(ildaFrame.getPointsDac());
 }
 
 
 //--------------------------------------------------------------
-void ofxRayComposer::setPoints(const vector<ofxIlda::Point>& _points) {
+void ofxRayComposer::setPoints(const vector<ofxIlda::PointDac>& _points) {
     if(lock()) {
         points = _points;
         unlock();
@@ -222,7 +222,7 @@ void ofxRayComposer::setPoints(const vector<ofxIlda::Point>& _points) {
 
 //--------------------------------------------------------------
 void ofxRayComposer::setPoints(const ofxIlda::Frame &ildaFrame) {
-    setPoints(ildaFrame.getPoints());
+    setPoints(ildaFrame.getPointsDac());
 }
 
 //--------------------------------------------------------------
@@ -266,9 +266,9 @@ bool ofxRayComposer::checkLastUpdate(){
 // for compability with ofxLaser
 //--------------------------------------------------------------
 bool ofxRayComposer::sendFrame(const vector<ofxLaser::Point>& points){
-        vector<ofxIlda::Point> sendpoints(points.size());
+        vector<ofxIlda::PointDac> sendpoints(points.size());
         for(int i = 0; i<points.size(); i++) {
-            ofxIlda::Point& p1 = sendpoints[i];
+            ofxIlda::PointDac& p1 = sendpoints[i];
             ofxLaser::Point p2 = points[i];
             p1.x = ofMap(p2.x,0,800,kIldaMinPoint, kIldaMaxPoint);
             p1.y = ofMap(p2.y,800,0,kIldaMinPoint, kIldaMaxPoint); // Y is UP in ilda specs
@@ -287,9 +287,9 @@ bool ofxRayComposer::sendFrame(const vector<ofxLaser::Point>& points){
 
 bool ofxRayComposer::sendPoints(const vector<ofxLaser::Point>& points){
     
-    vector<ofxIlda::Point> sendpoints(points.size());
+    vector<ofxIlda::PointDac> sendpoints(points.size());
     for(int i = 0; i<points.size(); i++) {
-        ofxIlda::Point& p1 = sendpoints[i];
+        ofxIlda::PointDac& p1 = sendpoints[i];
         ofxLaser::Point p2 = points[i];
         p1.x = ofMap(p2.x,0,800,kIldaMinPoint, kIldaMaxPoint);
         p1.y = ofMap(p2.y,800,0,kIldaMinPoint, kIldaMaxPoint); // Y is UP in ilda specs

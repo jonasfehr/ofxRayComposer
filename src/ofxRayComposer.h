@@ -36,10 +36,10 @@ public:
     void start();
     void stop();
     
-    void addPoints(const vector<ofxIlda::Point>& _points);
+    void addPoints(const vector<ofxIlda::PointDac>& _points);
     void addPoints(const ofxIlda::Frame &ildaFrame);
     
-    void setPoints(const vector<ofxIlda::Point>& _points);
+    void setPoints(const vector<ofxIlda::PointDac>& _points);
     void setPoints(const ofxIlda::Frame &ildaFrame);
     
     void send();
@@ -78,7 +78,7 @@ private:
     bool bExtraSafety;
     
     //struct etherdream *device;
-    vector<ofxIlda::Point> points;
+    vector<ofxIlda::PointDac> points;
     
     int idRayComposerConnection;
     
