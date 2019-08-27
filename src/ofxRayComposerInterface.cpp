@@ -114,9 +114,9 @@ void ofxRayComposer::Interface::send() {
     
     int ret = RCWaitForReady(handle, -1);
 //     int ret = 10;
-//    if(bWaitBeforeSend) ret = RCWaitForReady(handle, -1);
+//    if(bWaitForFreeBuffer) ret = RCWaitForReady(handle, -1);
 //    else{
-//        ret = RCWaitForReady(handle, 0);
+//        ret = RCWaitForReady(handle, 5);
 //        if(ret == 0) {
 //            points.clear();
 //            return;
@@ -236,16 +236,16 @@ bool ofxRayComposer::Interface::sendFrame(const vector<ofxLaser::Point>& points)
 }
 
 //--------------------------------------------------------------
-void ofxRayComposer::Interface::setWaitBeforeSend(bool b) {
+void ofxRayComposer::Interface::setWaitForFreeBuffer(bool b) {
     if(lock()) {
-        bWaitBeforeSend = b;
+        bWaitForFreeBuffer = b;
         unlock();
     }
 }
 
 //--------------------------------------------------------------
 bool ofxRayComposer::Interface::getWaitBeforeSend() const {
-    return bWaitBeforeSend;
+    return bWaitForFreeBuffer;
 }
 
 
@@ -281,3 +281,28 @@ void ofxRayComposer::Interface::close(){
     // kill();
 }
 
+
+void ofxRayComposer::Interface::update(){
+    switch (state) {
+            case RAYCOMPOSER_NOTFOUND:
+            //DO SOMETHING IF NO HANDLER
+            //if(bAutoConnect) init(connectionIndex, true);
+            break;
+            
+            case RAYCOMPOSER_FOUND:
+            openDevice();
+            break;
+            
+            case RAYCOMPOSER_OPENED:
+            startDevice();
+            break;
+            
+            case RAYCOMPOSER_STARTED:
+                if(bExtraSafety){
+                    if(checkLastUpdate()) send();
+                    else sendBlack();
+                }
+                else send();
+            break;
+    }
+}

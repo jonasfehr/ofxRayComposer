@@ -28,7 +28,7 @@ namespace ofxRayComposer {
             this->connectionIndex = connectionIndex;
             
             setPPS(30000);
-            setWaitBeforeSend(false);
+            setWaitForFreeBuffer(false);
         }
         
         ~Interface() {
@@ -58,12 +58,13 @@ namespace ofxRayComposer {
         void setPPS(int i);
         int getPPS() const;
         
-        void setWaitBeforeSend(bool b);
+        void setWaitForFreeBuffer(bool b);
         bool getWaitBeforeSend() const;
         
         string getDeviceID(){return deviceId;};
         int getConnectionIndex(){return connectionIndex;};
-        
+        int getState(){return state;};
+
         // Compatibility to ofxLaser : https://github.com/sebleedelisle/ofxLaser
         void setup(string ip){this->start();};
         bool sendFrame(const vector<ofxLaser::Point>& points);
@@ -71,11 +72,12 @@ namespace ofxRayComposer {
         bool setPointsPerSecond(uint32_t newpps);
         void close();
         
+        void update();
         
         void kill();
         
     private:
-        enum {
+        enum DAC_STATES{
             RAYCOMPOSER_NOTFOUND = 0,
             RAYCOMPOSER_FOUND,
             RAYCOMPOSER_OPENED,
@@ -83,7 +85,7 @@ namespace ofxRayComposer {
         } state;
         
         int pps;
-        bool bWaitBeforeSend;
+        bool bWaitForFreeBuffer;
         bool bAutoConnect;
         bool bExtraSafety;
         

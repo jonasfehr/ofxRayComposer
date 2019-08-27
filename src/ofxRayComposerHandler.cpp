@@ -102,6 +102,14 @@ bool ofxRayComposer::Handler::referenceInterface(std::shared_ptr<Interface> & in
         return true;
     } else {
         ofLogWarning() << "ofxRayComposer::Handler::referenceInterface - device not found.\n";
+        
+//        if(interfaces.size()>0){
+//            for(auto & interface : interfaces){
+//                if(interface.second->getState() == 1) deviceId = interface.second->getDeviceID();
+//                break;
+//            }
+//            referenceInterface(interface, deviceId);
+//        }
         return false;
     }
 }
