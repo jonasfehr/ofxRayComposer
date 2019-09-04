@@ -17,7 +17,6 @@ void ofxRayComposer::Interface::updateDeviceID(int index, bool bStartThread){
         return -5;
     }
     state = RAYCOMPOSER_FOUND;
-    if(bStartThread) start();
 
 }
 
@@ -44,7 +43,6 @@ void ofxRayComposer::Interface::startDevice(){
 //--------------------------------------------------------------
 void ofxRayComposer::Interface::kill() {
     clear();
-    stop();
     if(state > RAYCOMPOSER_OPENED) {
 //        printf("\nStoping laser.\n");
         int ret = RCStopOutput(handle);
@@ -85,43 +83,30 @@ void ofxRayComposer::Interface::threadedFunction() {
                 break;
                 
             case RAYCOMPOSER_STARTED:
-                if(tryLock()){// if of 0.10 lock() else lock()) {
                     if(bExtraSafety){
                         if(checkLastUpdate()) send();
                         else sendBlack();
                     }
                     else send();
-                    unlock();
-                }
                 break;
         }
     }
 }
 
 //--------------------------------------------------------------
-void ofxRayComposer::Interface::start() {
-    startThread();
-}
-
-//--------------------------------------------------------------
-void ofxRayComposer::Interface::stop() {
-    stopThread();
-}
-
-//--------------------------------------------------------------
 void ofxRayComposer::Interface::send() {
     if(state < RAYCOMPOSER_STARTED || points.empty()) return;
     
-    int ret = RCWaitForReady(handle, -1);
-//     int ret = 10;
-//    if(bWaitForFreeBuffer) ret = RCWaitForReady(handle, -1);
-//    else{
-//        ret = RCWaitForReady(handle, 5);
-//        if(ret == 0) {
-//            points.clear();
-//            return;
-//        }
-//    }
+//    int ret = RCWaitForReady(handle, -1);
+     int ret = 10;
+    if(bWaitForFreeBuffer) ret = RCWaitForReady(handle, -1);
+    else{
+        ret = RCWaitForReady(handle, 5);
+        if(ret == 0) {
+            points.clear();
+            return;
+        }
+    }
     
     if(ret < RCOk){
         ofLogWarning() << "ofxRayComposer::Interface::send - Error waiting for free buffer: " << ret << " " << deviceId << "! Exit.\n";
@@ -150,20 +135,14 @@ void ofxRayComposer::Interface::sendBlack() {
 
 //--------------------------------------------------------------
 void ofxRayComposer::Interface::clear() {
-    if(lock()) {
         points.clear();
-        unlock();
-    }
 }
 
 //--------------------------------------------------------------
 void ofxRayComposer::Interface::addPoints(const vector<ofxIlda::PointDac>& _points) {
-    if(lock()) {
         if(!_points.empty()) {
             points.insert(points.end(), _points.begin(), _points.end());
         }
-        unlock();
-    }
     updated();
 }
 
@@ -176,10 +155,7 @@ void ofxRayComposer::Interface::addPoints(const ofxIlda::Frame &ildaFrame) {
 
 //--------------------------------------------------------------
 void ofxRayComposer::Interface::setPoints(const vector<ofxIlda::PointDac>& _points) {
-    if(lock()) {
         points = _points;
-        unlock();
-    }
     updated();
 }
 
@@ -192,10 +168,7 @@ void ofxRayComposer::Interface::setPoints(const ofxIlda::Frame &ildaFrame) {
 
 //--------------------------------------------------------------
 void ofxRayComposer::Interface::setPPS(int i) {
-    if(lock()) {
         pps = i;
-        unlock();
-    }
 }
 
 //--------------------------------------------------------------
@@ -237,10 +210,7 @@ bool ofxRayComposer::Interface::sendFrame(const vector<ofxLaser::Point>& points)
 
 //--------------------------------------------------------------
 void ofxRayComposer::Interface::setWaitForFreeBuffer(bool b) {
-    if(lock()) {
         bWaitForFreeBuffer = b;
-        unlock();
-    }
 }
 
 //--------------------------------------------------------------
@@ -284,25 +254,25 @@ void ofxRayComposer::Interface::close(){
 
 void ofxRayComposer::Interface::update(){
     switch (state) {
-            case RAYCOMPOSER_NOTFOUND:
+        case RAYCOMPOSER_NOTFOUND:
             //DO SOMETHING IF NO HANDLER
             //if(bAutoConnect) init(connectionIndex, true);
             break;
             
-            case RAYCOMPOSER_FOUND:
+        case RAYCOMPOSER_FOUND:
             openDevice();
             break;
             
-            case RAYCOMPOSER_OPENED:
+        case RAYCOMPOSER_OPENED:
             startDevice();
             break;
             
-            case RAYCOMPOSER_STARTED:
-                if(bExtraSafety){
-                    if(checkLastUpdate()) send();
-                    else sendBlack();
-                }
-                else send();
+        case RAYCOMPOSER_STARTED:
+            if(bExtraSafety){
+                if(checkLastUpdate()) send();
+                else sendBlack();
+            }
+            else send();
             break;
     }
 }

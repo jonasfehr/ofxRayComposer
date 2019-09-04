@@ -97,7 +97,6 @@ bool ofxRayComposer::Handler::referenceInterface(std::shared_ptr<Interface> & in
     std::shared_ptr<Interface> foundInterface = getInterface(deviceId);
     if (foundInterface != NULL){
         interface = foundInterface;
-        interface->start();
         ofLogNotice() << "ofxRayComposer::Handler::referenceInterface - successfull.\n";
         return true;
     } else {

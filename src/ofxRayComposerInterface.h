@@ -43,8 +43,6 @@ namespace ofxRayComposer {
         void startDevice();
 
         void clear();
-        void start();
-        void stop();
         
         void addPoints(const vector<ofxIlda::PointDac>& _points);
         void addPoints(const ofxIlda::Frame &ildaFrame);
@@ -66,7 +64,7 @@ namespace ofxRayComposer {
         int getState(){return state;};
 
         // Compatibility to ofxLaser : https://github.com/sebleedelisle/ofxLaser
-        void setup(string ip){this->start();};
+        void setup(string ip){};
         bool sendFrame(const vector<ofxLaser::Point>& points);
         bool sendPoints(const vector<ofxLaser::Point>& points);
         bool setPointsPerSecond(uint32_t newpps);

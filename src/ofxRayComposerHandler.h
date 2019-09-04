@@ -24,7 +24,7 @@ namespace ofxRayComposer{
             kill();
         }
         
-        void setup(bool autoUpdateList = true, int updateEveryXFrame = 60*60);
+        void setup(bool autoUpdateList = true, int updateEveryXFrame = 60*5);
         
         std::shared_ptr<Interface> getInterface(string deviceId);
         bool referenceInterface(std::shared_ptr<Interface> & interface, string deviceId);
