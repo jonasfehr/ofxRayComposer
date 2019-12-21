@@ -13,7 +13,7 @@ void ofxRayComposer::Handler::setup(bool bAutoUpdateList, int updateEveryXFrame)
 
     /* Sleep for a bit over a second, to ensure that we see broadcasts
      * from all available DACs. */
-    usleep(1000000);
+	ofSleepMillis(1000);
     init();
     this->updateEveryXFrame = updateEveryXFrame;
     
@@ -32,11 +32,11 @@ void ofxRayComposer::Handler::init() {
     int ret = RCInit();
     if(ret < 0){
         ofLogWarning() << "ofxRayComposer::Handler::init - Error initialising Library! Exit.\n";
-        return -1;
+        //return -1;
     }
     if(ret < RCAPI_VERSION){
         ofLogWarning() << "ofxRayComposer::Handler::init - API Version too old. Please use a newer dll/lib.\n";
-        return -2;
+        //return -2;
     }
     ofLogNotice() << "ofxRayComposer::Handler::init - API Version " << (ret >> 8) << "."<< (ret & 0xFF) << "\n"; //printf("API Version %d.%02d\n", ret >> 8, ret & 0xFF);
     
@@ -44,11 +44,11 @@ void ofxRayComposer::Handler::init() {
     count = RCEnumerateDevices();
     if(count < 0){
         ofLogWarning() << "ofxRayComposer::Handler::init - Error enumerating devices! Exit.\n";
-        return -3;
+        //return -3;
     }
     if(count == 0){
         ofLogWarning() << "ofxRayComposer::Handler::init - No devices found. Exit.\n";
-        return 0;
+        //return 0;
     }
     
     /* List the devices found. */
