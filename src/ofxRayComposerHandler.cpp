@@ -57,7 +57,7 @@ void ofxRayComposer::Handler::init() {
     for(int i = 0; i < count; i++){
         auto interface = make_shared<Interface>(i);
         string newDeviceID = interface->getDeviceID();
-        if (!interfaces.count(newDeviceID)>0){
+        if (!(interfaces.count(newDeviceID) > 0)){
             //interface->start();
             ofLogNotice() << "ofxRayComposer::Handler::init - new Interface Found : " << interface->getConnectionIndex() << " - " << interface->getDeviceID() << endl;
             interfaces[newDeviceID] = interface;

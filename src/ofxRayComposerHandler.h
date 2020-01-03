@@ -30,10 +30,10 @@ namespace ofxRayComposer{
         bool referenceInterface(std::shared_ptr<Interface> & interface, string deviceId);
         
         vector<string> getListOfDeviceIDs();
-        
+        void kill();
+
     private:
         void init();
-        void kill();
         void updateList(ofEventArgs& updateArgs);
         int updateEveryXFrame;
     public:

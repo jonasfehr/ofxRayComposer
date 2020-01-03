@@ -112,7 +112,7 @@ void ofxRayComposer::Interface::send() {
         ofLogWarning() << "ofxRayComposer::Interface::send - Error waiting for free buffer: " << ret << " " << deviceId << "! Exit.\n";
         //return -8;
     }
-    ret = RCWriteFrame(handle, (RCPoint*)points.data(), points.size(), pps, 0);
+    ret = RCWriteFrame(handle, (RCPoint*)points.data(), points.size(), pps, 1);
     
     if(ret < RCOk){
         ofLogWarning() << "ofxRayComposer::Interface::send - Error writing frame to device: " << ret << "! Exit.\n";
