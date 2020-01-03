@@ -14,7 +14,7 @@ void ofxRayComposer::Interface::updateDeviceID(int index, bool bStartThread){
     int ret = RCDeviceID(index, deviceId, sizeof(deviceId));
     if(ret < 0){
         ofLogWarning() << "ofxRayComposer::Interface::init - Error reading device id! Exit.\n";
-        return -5;
+        //return -5;
     }
     state = RAYCOMPOSER_FOUND;
 
@@ -25,7 +25,7 @@ void ofxRayComposer::Interface::openDevice(){
     handle = RCOpenDevice(deviceId);
     if(handle < 0){
         ofLogWarning() << "ofxRayComposer::Interface::init - Error opening device: " << handle << "! Exit.\n";
-        return -6;
+        //return -6;
     }
     state = RAYCOMPOSER_OPENED;
 
@@ -35,7 +35,7 @@ void ofxRayComposer::Interface::startDevice(){
     int ret = RCStartOutput(handle);
     if(ret < RCOk){
         ofLogWarning() << "ofxRayComposer::Interface::init - Error starting laser output: " << ret << "! Exit.\n";
-        return -7;
+        //return -7;
     }
     state = RAYCOMPOSER_STARTED;
 }
@@ -243,6 +243,7 @@ bool ofxRayComposer::Interface::sendPoints(const vector<ofxLaser::Point>& points
 
 bool ofxRayComposer::Interface::setPointsPerSecond(uint32_t newpps){
     this->setPPS(newpps);
+	return true;
 }
 
 void ofxRayComposer::Interface::close(){
